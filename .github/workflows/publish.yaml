@@ -42,6 +42,7 @@ jobs:
         id: release
         if: ${{ github.event_name == 'release' }}
         uses: shogo82148/actions-upload-release-asset@e94a7386c3c266a207386460471b1efb5c7431eb # tag=v1.6.3
+        permissions: write-all
         with:
           upload_url: ${{ github.event.release.upload_url }}
           overwrite: true
