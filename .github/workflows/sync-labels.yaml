@@ -9,4 +9,4 @@ jobs:
   call:
     uses: jellyfin/jellyfin-meta-plugins/.github/workflows/sync-labels.yaml@master
     secrets:
-      token: ${{ env.GITHUB_TOKEN }}
+      token: ${{ secrets.GITHUB_TOKEN }}

@@ -17,4 +17,4 @@ jobs:
     with:
       repository-name: crobibero/jellyfin-plugin-transcodekiller
     secrets:
-      token: ${{ env.GITHUB_TOKEN }}
+      token: ${{ secrets.GITHUB_TOKEN }}
