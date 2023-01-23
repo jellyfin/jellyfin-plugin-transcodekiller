@@ -50,8 +50,8 @@ public class KillerEntrypoint : IServerEntryPoint
          */
         if (e.Session.PlayState.PlayMethod is not PlayMethod.Transcode
             || e.Item is not Video
-            || e.Item.Width <= PluginConfiguration.MaxWidth
-            || e.Item.Height <= PluginConfiguration.MaxHeight)
+            || (e.Item.Width <= PluginConfiguration.MaxWidth
+                && e.Item.Height <= PluginConfiguration.MaxHeight))
         {
             return;
         }
