@@ -4,8 +4,8 @@
 <p align="center">
 
 <br/>
-<a href="https://github.com/crobibero/jellyfin-plugin-transcodekiller/actions?query=workflow%3A%22Test+Build+Plugin%22">
-<img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/crobibero/jellyfin-plugin-transcodekiller/Test%20Build%20Plugin.svg">
+<a href="https://github.com/crobibero/jellyfin-plugin-transcodekiller/actions?query=workflow%3A%22Build+Plugin%22">
+<img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/crobibero/jellyfin-plugin-transcodekiller/Build%20Pluginn.svg">
 </a>
 <a href="https://github.com/crobibero/jellyfin-plugin-transcodekiller">
 <img alt="GPLv3 License" src="https://img.shields.io/github/license/crobibero/jellyfin-plugin-transcodekiller.svg"/>
