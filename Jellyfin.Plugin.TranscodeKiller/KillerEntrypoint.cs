@@ -1,12 +1,12 @@
-using System;
+using System.Threading;
 using System.Threading.Tasks;
-using Jellyfin.Api.Helpers;
 using Jellyfin.Plugin.TranscodeKiller.Configuration;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Library;
-using MediaBrowser.Controller.Plugins;
+using MediaBrowser.Controller.MediaEncoding;
 using MediaBrowser.Controller.Session;
 using MediaBrowser.Model.Session;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 namespace Jellyfin.Plugin.TranscodeKiller;
@@ -14,10 +14,10 @@ namespace Jellyfin.Plugin.TranscodeKiller;
 /// <summary>
 /// Plugin main process.
 /// </summary>
-public class KillerEntrypoint : IServerEntryPoint
+public class KillerEntrypoint : IHostedService
 {
     private readonly ISessionManager _sessionManager;
-    private readonly TranscodingJobHelper _transcodingJobHelper;
+    private readonly ITranscodeManager _transcodeManager;
     private readonly ILogger<KillerEntrypoint> _logger;
 
     /// <summary>
@@ -25,23 +25,15 @@ public class KillerEntrypoint : IServerEntryPoint
     /// </summary>
     /// <param name="sessionManager">Instance of the <see cref="ISessionManager"/> interface.</param>
     /// <param name="logger">Instance of the <see cref="ILogger{Entrypoint}"/> interface.</param>
-    /// <param name="transcodingJobHelper">Instance of the <see cref="TranscodingJobHelper"/>.</param>
-    public KillerEntrypoint(ISessionManager sessionManager, ILogger<KillerEntrypoint> logger, TranscodingJobHelper transcodingJobHelper)
+    /// <param name="transcodeManager">Instance of the <see cref="ITranscodeManager"/>.</param>
+    public KillerEntrypoint(ISessionManager sessionManager, ILogger<KillerEntrypoint> logger, ITranscodeManager transcodeManager)
     {
         _sessionManager = sessionManager;
         _logger = logger;
-        _transcodingJobHelper = transcodingJobHelper;
+        _transcodeManager = transcodeManager;
     }
 
     private static PluginConfiguration PluginConfiguration => TranscodeKillerPlugin.Instance!.Configuration;
-
-    /// <inheritdoc />
-    public Task RunAsync()
-    {
-        _sessionManager.PlaybackProgress += PlaybackProgressHandler;
-
-        return Task.CompletedTask;
-    }
 
     private async void PlaybackProgressHandler(object? sender, PlaybackProgressEventArgs e)
     {
@@ -61,7 +53,7 @@ public class KillerEntrypoint : IServerEntryPoint
             e.PlaySessionId,
             e.Session.UserId);
 
-        await _transcodingJobHelper.KillTranscodingJobs(
+        await _transcodeManager.KillTranscodingJobs(
                 e.Session.DeviceId,
                 e.PlaySessionId,
                 _ => true)
@@ -69,21 +61,16 @@ public class KillerEntrypoint : IServerEntryPoint
     }
 
     /// <inheritdoc />
-    public void Dispose()
+    public Task StartAsync(CancellationToken cancellationToken)
     {
-        Dispose(true);
-        GC.SuppressFinalize(this);
+        _sessionManager.PlaybackProgress += PlaybackProgressHandler;
+        return Task.CompletedTask;
     }
 
-    /// <summary>
-    /// Dispose managed objects.
-    /// </summary>
-    /// <param name="disposing">Whether to dispose.</param>
-    protected virtual void Dispose(bool disposing)
+    /// <inheritdoc />
+    public Task StopAsync(CancellationToken cancellationToken)
     {
-        if (disposing)
-        {
-            _sessionManager.PlaybackProgress -= PlaybackProgressHandler;
-        }
+        _sessionManager.PlaybackProgress -= PlaybackProgressHandler;
+        return Task.CompletedTask;
     }
 }

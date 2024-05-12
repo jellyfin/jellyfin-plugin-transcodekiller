@@ -1,9 +1,9 @@
 name: "Transcode Killer"
 guid: "a0444c3b-fe1c-4258-9e0f-a139fc093949"
 version: "2"
-targetAbi: "10.8.1.0"
-framework: "net6.0"
-owner: "crobibero"
+targetAbi: "10.9.0.0"
+framework: "net8.0"
+owner: "jellyfin"
 overview: "Kills transcoded streams."
 description: >
   Kills transcoded streams.

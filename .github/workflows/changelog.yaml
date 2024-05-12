@@ -14,8 +14,7 @@ on:
 jobs:
   call:
     uses: jellyfin/jellyfin-meta-plugins/.github/workflows/changelog.yaml@master
-    permissions: write-all
     with:
-      repository-name: crobibero/jellyfin-plugin-transcodekiller
+      repository-name: jellyfin/jellyfin-plugin-transcodekiller
     secrets:
-      token: ${{ secrets.GITHUB_TOKEN }}
+      token: ${{ secrets.JF_BOT_TOKEN }}
