@@ -15,4 +15,13 @@
 </a>
 </p>
 
-Plugin to automatically kill transcoded streams.
+<p>
+  Plugin prevents Jellyfin from transcoding videos when the source resolution exceeds set limits. By configuring max width/height, you can:
+  <ul>
+    <li>Block transcoding entirely (e.g., 1x1 limit).</li>
+    <li>Block heavy transcodes like 4K → 1080p.</li>
+  </ul>
+</p>
+<p>
+  Since Jellyfin can’t fully disable transcoding by default, the plugin is useful for low-power servers or CPU-only setups, ensuring users don’t overload the system with demanding transcodes.
+</p>
