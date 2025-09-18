@@ -4,10 +4,8 @@ version: "3"
 targetAbi: "10.9.0.0"
 framework: "net8.0"
 owner: "jellyfin"
-overview: "Kills transcoded streams."
-description: >
-  Kills transcoded streams.
-
+overview: "Kills transcodes to prevent server overload."
+description: "Kills transcodes above set resolutions to prevent server overload."
 category: "General"
 artifacts:
   - "Jellyfin.Plugin.TranscodeKiller.dll"
