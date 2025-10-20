@@ -1,12 +1,12 @@
 name: "Transcode Killer"
 guid: "a0444c3b-fe1c-4258-9e0f-a139fc093949"
 version: "3"
-targetAbi: "10.9.0.0"
-framework: "net8.0"
+targetAbi: "10.11.0.0"
+framework: "net9.0"
 owner: "jellyfin"
 overview: "Kills transcodes to prevent server overload."
 description: "Kills transcodes above set resolutions to prevent server overload."
-category: "General"
+category: "Administration"
 artifacts:
   - "Jellyfin.Plugin.TranscodeKiller.dll"
 changelog: |-
