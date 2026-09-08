@@ -1,10 +1,13 @@
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Jellyfin.Plugin.TranscodeKiller.Configuration;
 using MediaBrowser.Controller.Entities;
 using MediaBrowser.Controller.Library;
+using MediaBrowser.Controller.LiveTv;
 using MediaBrowser.Controller.MediaEncoding;
 using MediaBrowser.Controller.Session;
+using MediaBrowser.Model.Entities;
 using MediaBrowser.Model.Session;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -41,11 +44,25 @@ public class KillerEntrypoint : IHostedService
          * Only kill processes that are videos with over the configured width or height.
          */
         if (e.Session.PlayState.PlayMethod is not PlayMethod.Transcode
-            || e.Item is not Video
-            || (e.Item.Width <= PluginConfiguration.MaxWidth
+            || e.Session.TranscodingInfo == null
+            // Permit remuxing
+            || ((e.Session.TranscodingInfo.IsVideoDirect || e.Session.TranscodingInfo.VideoCodec == null) && (e.Session.TranscodingInfo.IsAudioDirect || e.Session.TranscodingInfo.AudioCodec == null))
+            || (e.Item is not Video && e.Item is not LiveTvChannel)
+            // Regular videos can be checked via shortpath
+            || (e.Item is Video && e.Item.Width <= PluginConfiguration.MaxWidth
                 && e.Item.Height <= PluginConfiguration.MaxHeight))
         {
             return;
+        }
+
+        // Live TV channels don't have width and height readily available, so we need to grab it from the stream itself.
+        if (e.Item is LiveTvChannel)
+        {
+            var videoStream = e.MediaInfo.MediaStreams.FirstOrDefault(i => i.Type == MediaStreamType.Video);
+            if (videoStream == null || videoStream.Width == null || videoStream.Height == null || (videoStream.Width <= PluginConfiguration.MaxWidth && videoStream.Height <= PluginConfiguration.MaxHeight))
+            {
+                return;
+            }
         }
 
         _logger.LogWarning(
