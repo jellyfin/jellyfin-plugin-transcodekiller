@@ -22,6 +22,10 @@
                             <input is="emby-input" type="text" id="txtMaxHeight" required placeholder="1080" label="Maximum Height:" />
                             <div class="fieldDescription">The maximum video height that is allowed to transcode.</div>
                         </div>
+                        <div class="inputContainer">
+                            <input is="emby-input" type="text" id="txtMessage" label="Kill Message:"/>
+                            <div class="fieldDescription">This message is shown to the user when their transcode session is killed. Leave empty to disable.</div>
+                        </div>
                     </div>
                     <div>
                         <button is="emby-button" type="submit" data-theme="b" class="raised button-submit block">
@@ -43,6 +47,7 @@
 
             txtMaxWidth: document.querySelector("#txtMaxWidth"),
             txtMaxHeight: document.querySelector("#txtMaxHeight"),
+            txtMessage: document.querySelector("#txtMessage"),
         };
 
         document.querySelector('.esqConfigurationPage').addEventListener("pageshow", function () {
@@ -54,6 +59,7 @@
             window.ApiClient.getPluginConfiguration(TranscodeKillerConfigurationPage.pluginUniqueId).then(function (config) {
                 TranscodeKillerConfigurationPage.txtMaxWidth.value = config.MaxWidth;
                 TranscodeKillerConfigurationPage.txtMaxHeight.value = config.MaxHeight;
+                TranscodeKillerConfigurationPage.txtMessage.value = config.Message;
 
                 Dashboard.hideLoadingMsg();
             });
@@ -67,6 +73,7 @@
             window.ApiClient.getPluginConfiguration(TranscodeKillerConfigurationPage.pluginUniqueId).then(function (config) {
                 config.MaxWidth = parseInt(TranscodeKillerConfigurationPage.txtMaxWidth.value);
                 config.MaxHeight = parseInt(TranscodeKillerConfigurationPage.txtMaxHeight.value);
+                config.Message = TranscodeKillerConfigurationPage.txtMessage.value;
 
                 window.ApiClient.updatePluginConfiguration(TranscodeKillerConfigurationPage.pluginUniqueId, config).then(Dashboard.processPluginConfigurationUpdateResult);
             });

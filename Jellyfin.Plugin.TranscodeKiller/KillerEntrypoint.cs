@@ -58,6 +58,19 @@ public class KillerEntrypoint : IHostedService
                 e.PlaySessionId,
                 _ => true)
             .ConfigureAwait(false);
+
+        if (!string.IsNullOrEmpty(PluginConfiguration.Message))
+        {
+            await _sessionManager.SendMessageCommand(
+                e.Session.Id,
+                e.Session.Id,
+                new MessageCommand
+                {
+                    Text = PluginConfiguration.Message,
+                    TimeoutMs = 5000
+                },
+                CancellationToken.None).ConfigureAwait(false);
+        }
     }
 
     /// <inheritdoc />

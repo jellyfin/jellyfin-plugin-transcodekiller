@@ -16,4 +16,9 @@ public class PluginConfiguration : BasePluginConfiguration
     /// Gets or sets the max height allowed to transcode.
     /// </summary>
     public int MaxHeight { get; set; } = 1080;
+
+    /// <summary>
+    /// Gets or sets the message shown to users whenever their session gets killed.
+    /// </summary>
+    public string Message { get; set; } = string.Empty;
 }
