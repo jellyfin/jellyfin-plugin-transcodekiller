@@ -21,6 +21,7 @@
     <li>Block transcoding entirely (e.g., 1x1 limit).</li>
     <li>Block heavy transcodes like 4K → 1080p.</li>
   </ul>
+  Remuxes and audio-only transcodes (video stream copied) are always allowed.
 </p>
 <p>
   Since Jellyfin can’t fully disable transcoding by default, the plugin is useful for low-power servers or CPU-only setups, ensuring users don’t overload the system with demanding transcodes.

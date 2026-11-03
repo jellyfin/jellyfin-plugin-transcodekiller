@@ -38,9 +38,13 @@ public class KillerEntrypoint : IHostedService
     private async void PlaybackProgressHandler(object? sender, PlaybackProgressEventArgs e)
     {
         /*
-         * Only kill processes that are videos with over the configured width or height.
+         * Only kill processes that re-encode video for videos over the configured width or height.
+         * Remuxes and audio-only transcodes copy the video stream and are allowed.
+         * TranscodingInfo is null until ffmpeg starts; the next progress report re-checks.
          */
         if (e.Session.PlayState.PlayMethod is not PlayMethod.Transcode
+            || e.Session.TranscodingInfo is null
+            || e.Session.TranscodingInfo.IsVideoDirect
             || e.Item is not Video
             || (e.Item.Width <= PluginConfiguration.MaxWidth
                 && e.Item.Height <= PluginConfiguration.MaxHeight))
